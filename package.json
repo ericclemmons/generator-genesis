@@ -1,0 +1,31 @@
+{
+  "name": "generator-genesis",
+  "version": "0.1.0",
+  "description": "Yeoman Generator for Genesis Skeleton",
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ericclemmons/generator-genesis.git"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "express",
+    "skeleton",
+    "angular"
+  ],
+  "author": {
+    "name": "Eric Clemmons",
+    "email": "eric@smarterspam.com"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "license": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "dependencies": {
+    "yeoman-generator": "~0.10.2"
+  }
+}
