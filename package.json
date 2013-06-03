@@ -1,7 +1,9 @@
 {
   "name": "generator-genesis",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Yeoman Generator for Genesis Skeleton",
+  "homepage": "https://github.com/ericclemmons/generator-genesis",
+  "bugs": "https://github.com/ericclemmons/generator-genesis/issues",
   "main": "app/index.js",
   "repository": {
     "type": "git",
@@ -15,17 +17,24 @@
   ],
   "author": {
     "name": "Eric Clemmons",
+    "url": "https://github.com/ericclemmons",
     "email": "eric@smarterspam.com"
+  },
+  "scripts": {
+    "test": "mocha"
   },
   "engines": {
     "node": ">=0.8.0"
   },
-  "license": [
+  "licenses": [
     {
       "type": "MIT"
     }
   ],
   "dependencies": {
-    "yeoman-generator": "~0.10.2"
+    "yeoman-generator": "~0.11"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0"
   }
 }

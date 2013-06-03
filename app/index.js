@@ -1,24 +1,120 @@
-var fs = require('fs');
+'use strict';
 
-var Generator = module.exports = function() {
-  var package = require(this.sourceRoot() + '/package.json');
-  var prompts = [];
-  var files   = this.expandFiles('**/*', { cwd: this.sourceRoot(), dot: true });
-  var ignores = [
-    '.git',
-    'LICENSE',
-    'README.md',
-  ];
+var fs      = require('fs');
+var util    = require('util');
+var path    = require('path');
+var yeoman  = require('yeoman-generator');
 
-  this.log.writeln('Generating from ' + 'Genesis Skeleton'.cyan + ' v' + package.version.cyan + '...');
 
-  files.forEach(function(file) {
-    if (ignores.indexOf(file) !== -1) {
-      return;
-    }
+var GenesisGenerator = module.exports = function GenesisGenerator(args, options, config) {
+  yeoman.generators.Base.apply(this, arguments);
 
-    this.copy(file, file);
-  }, this);
+  this.on('end', function () {
+    this.installDependencies({ skipInstall: options['skip-install'] });
+  });
+
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-Generator.name = "Genesis Skeleton";
+util.inherits(GenesisGenerator, yeoman.generators.Base);
+
+GenesisGenerator.prototype.askFor = function askFor() {
+  var cb = this.async();
+
+  // welcome message
+  var welcome =
+  "\n    .---------------------------------------." +
+  "\n    |                                       |" +
+  "\n    |    " + "G E N E S I S   S K E L E T O N".yellow.bold + "    |" +
+  "\n    |                                       |" +
+  "\n    |        " + "You're moments away from".red + "       |" +
+  "\n    |          " + "your next great app!".red + "         |" +
+  "\n    |                                       |" +
+  "\n    '---------------------------------------'" +
+  "\n";
+
+  this.log.writeln(welcome);
+
+  var prompts = [];
+
+  try {
+    var pkg = require(path.join(process.cwd(), 'package.json'));
+  } catch (e) {}
+
+  if (!pkg) {
+    prompts.push({
+      name:     'initNpm',
+      message:  'I recommend initializing your `package.json` file first.\n' +
+                '    Would you like to do that now?'.yellow,
+      default:  'Y/n'
+    });
+  }
+
+  this.prompt(prompts, function (err, props) {
+    if (err) {
+      return this.emit('error', err);
+    }
+
+    for (var prop in props) {
+      this[prop] = (/y/i).test(props[prop]);
+    }
+
+    cb();
+  }.bind(this));
+};
+
+GenesisGenerator.prototype.npm = function npm() {
+  var cb = this.async();
+
+  if (this.initNpm) {
+    this.spawnCommand('npm', ['init'], cb);
+    this.log.ok('Initialized ' + 'package.json'.yellow);
+  } else {
+    this.log.ok('Already initialized ' + 'package.json'.yellow);
+    cb();
+  }
+}
+
+GenesisGenerator.prototype.clone = function clone() {
+  var cb      = this.async();
+  var branch  = this.options.branch || 'master';
+
+  if (this.options.feature) {
+    branch = 'feature/' + this.options.feature;
+  }
+
+  try {
+    var originalPkg = require(path.join(process.cwd(), 'package.json'));
+  } catch (e) {}
+
+  this.remote('ericclemmons', 'genesis-skeleton', branch, function(err, remote) {
+    if (originalPkg) {
+      var remotePath  = path.join(remote.cachePath, 'package.json');
+      var remotePkg   = JSON.parse(fs.readFileSync(remotePath));
+      var props       = ['scripts', 'dependencies', 'peerDependencies'];
+
+
+      for (var key in props) {
+        var prop = props[key];
+
+        if (!originalPkg[prop]) {
+          originalPkg[prop] = {};
+        }
+
+        this._.extend(originalPkg[prop], remotePkg[prop] || {});
+      }
+
+      fs.writeFileSync(remotePath, JSON.stringify(originalPkg, null, 2) + "\n");
+
+      this.log.ok('Merged Genesis Skeleton package into existing ' + 'package.json'.yellow);
+    }
+
+    remote.directory('.', '.');
+
+    cb();
+  }.bind(this), true);
+};
+
+GenesisGenerator.prototype.cleanup = function cleanup() {
+  this.log.ok('Generated Genesis Skeleton');
+};
