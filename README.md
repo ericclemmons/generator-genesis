@@ -21,6 +21,17 @@ You can also specify which Genesis Skeleton *feature* you would like to use:
     yo genesis --feature=seo
 
 
+Release History
+---------------
+
+### v0.2.1
+
+- Cosmetic adjustment to `npm init` step
+
+### v0.2.0
+
+- Complete refactor using `yeoman/generator@0.11.1`
+
 
 License
 -------
