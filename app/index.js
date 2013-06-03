@@ -44,8 +44,7 @@ GenesisGenerator.prototype.askFor = function askFor() {
   if (!pkg) {
     prompts.push({
       name:     'initNpm',
-      message:  'I recommend initializing your `package.json` file first.\n' +
-                '    Would you like to do that now?'.yellow,
+      message:  'Would you like to setup ' + 'package.json'.yellow + ' first?',
       default:  'Y/n'
     });
   }
@@ -64,14 +63,18 @@ GenesisGenerator.prototype.askFor = function askFor() {
 };
 
 GenesisGenerator.prototype.npm = function npm() {
-  var cb = this.async();
+  var done = this.async();
 
   if (this.initNpm) {
-    this.spawnCommand('npm', ['init'], cb);
-    this.log.ok('Initialized ' + 'package.json'.yellow);
+    var cb = function(err) {
+      this.log.ok('Initialized ' + 'package.json'.yellow);
+      done(err);
+    }.bind(this);
+
+    this.spawnCommand('npm', ['init'], cb).on('exit', cb);
   } else {
     this.log.ok('Already initialized ' + 'package.json'.yellow);
-    cb();
+    done();
   }
 }
 
