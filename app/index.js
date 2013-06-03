@@ -91,6 +91,8 @@ GenesisGenerator.prototype.clone = function clone() {
   } catch (e) {}
 
   this.remote('ericclemmons', 'genesis-skeleton', branch, function(err, remote) {
+    this.log.ok('Downloaded latest Genesis Skeleton (' + branch.yellow + ')');
+
     if (originalPkg) {
       var remotePath  = path.join(remote.cachePath, 'package.json');
       var remotePkg   = JSON.parse(fs.readFileSync(remotePath));
