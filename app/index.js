@@ -49,11 +49,7 @@ GenesisGenerator.prototype.askFor = function askFor() {
     });
   }
 
-  this.prompt(prompts, function (err, props) {
-    if (err) {
-      return this.emit('error', err);
-    }
-
+  this.prompt(prompts, function (props) {
     for (var prop in props) {
       this[prop] = (/y/i).test(props[prop]);
     }
