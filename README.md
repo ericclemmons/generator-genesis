@@ -24,6 +24,10 @@ You can also specify which Genesis Skeleton *feature* you would like to use:
 Release History
 ---------------
 
+### v0.2.3
+
+- Update to `yeoman/generator@0.12`
+
 ### v0.2.2
 
 - Indicate branch when running generator
