@@ -78,8 +78,8 @@ GenesisGenerator.prototype.clone = function clone() {
   var cb      = this.async();
   var branch  = this.options.branch || 'master';
 
-  if (this.options.feature) {
-    branch = 'feature/' + this.options.feature;
+  if (this.options.variant) {
+    branch = 'variant/' + this.options.variant;
   }
 
   try {

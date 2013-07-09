@@ -1,6 +1,6 @@
 {
   "name": "generator-genesis",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Yeoman Generator for Genesis Skeleton",
   "homepage": "https://github.com/ericclemmons/generator-genesis",
   "bugs": "https://github.com/ericclemmons/generator-genesis/issues",
