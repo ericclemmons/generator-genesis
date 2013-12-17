@@ -4,6 +4,7 @@ var fs      = require('fs');
 var util    = require('util');
 var path    = require('path');
 var yeoman  = require('yeoman-generator');
+var chalk   = require('chalk');
 
 
 var GenesisGenerator = module.exports = function GenesisGenerator(args, options, config) {
@@ -25,10 +26,10 @@ GenesisGenerator.prototype.askFor = function askFor() {
   var welcome =
   "\n    .---------------------------------------." +
   "\n    |                                       |" +
-  "\n    |    " + "G E N E S I S   S K E L E T O N".yellow.bold + "    |" +
+  "\n    |    " + chalk.yellow.bold("G E N E S I S   S K E L E T O N") + "    |" +
   "\n    |                                       |" +
-  "\n    |        " + "You're moments away from".red + "       |" +
-  "\n    |          " + "your next great app!".red + "         |" +
+  "\n    |        " + chalk.red("You're moments away from") + "       |" +
+  "\n    |          " + chalk.red("your next great app!") + "         |" +
   "\n    |                                       |" +
   "\n    '---------------------------------------'" +
   "\n";
@@ -44,7 +45,7 @@ GenesisGenerator.prototype.askFor = function askFor() {
   if (!pkg) {
     prompts.push({
       name:     'initNpm',
-      message:  'Would you like to setup ' + 'package.json'.yellow + ' first?',
+      message:  'Would you like to setup ' + chalk.yellow('package.json') + ' first?',
       default:  'Y/n'
     });
   }
@@ -63,13 +64,13 @@ GenesisGenerator.prototype.npm = function npm() {
 
   if (this.initNpm) {
     var cb = function(err) {
-      this.log.ok('Initialized ' + 'package.json'.yellow);
+      this.log.ok('Initialized ' + chalk.yellow('package.json'));
       done(err);
     }.bind(this);
 
     this.spawnCommand('npm', ['init'], cb).on('exit', cb);
   } else {
-    this.log.ok('Already initialized ' + 'package.json'.yellow);
+    this.log.ok('Already initialized ' + chalk.yellow('package.json'));
     done();
   }
 }
@@ -87,7 +88,7 @@ GenesisGenerator.prototype.clone = function clone() {
   } catch (e) {}
 
   this.remote('ericclemmons', 'genesis-skeleton', branch, function(err, remote) {
-    this.log.ok('Downloaded latest Genesis Skeleton (' + branch.yellow + ')');
+    this.log.ok('Downloaded latest Genesis Skeleton (' + chalk.yellow(branch) + ')');
 
     if (originalPkg) {
       var remotePath  = path.join(remote.cachePath, 'package.json');
@@ -107,7 +108,7 @@ GenesisGenerator.prototype.clone = function clone() {
 
       fs.writeFileSync(remotePath, JSON.stringify(originalPkg, null, 2) + "\n");
 
-      this.log.ok('Merged Genesis Skeleton package into existing ' + 'package.json'.yellow);
+      this.log.ok('Merged Genesis Skeleton package into existing ' + chalk.yellow('package.json'));
     }
 
     remote.directory('.', '.');
